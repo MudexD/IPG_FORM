@@ -1,0 +1,276 @@
+//----------------Listar el historial de los comentarios------------
+function CheckComment(){
+	var Estado = ["Solicitante","Revisión Head","Revisión CEO"];
+	var history = "";
+	for(i=1;i<4;i++){
+		if(__EFGetElementByEFFieldName("comment_"+ i).value != ""){
+			history = history + "<li class=lista><strong>" + Estado[i-1] + ":</strong> " + __EFGetElementByEFFieldName("comment_"+ i).value + "</li>";
+		}
+	}
+	__EFGetElementByEFFieldName("TotalComment").value  = "<ul type=disc>" + history + "</ul>";
+}
+//----------Convertir bI-OTROS-IGV en decimales-----
+function tipoMoneda(){
+for(i=1;i<6;i++){
+	  var num1 = __EFGetElementByEFFieldName("bi_" + i).value;
+		if (num1 != ""){
+			var num2 = num1.replace(",", ".");
+			var newnum = Math.round(num2 * 100) / 100;
+			var newnum1 = newnum.toFixed(2);
+			__EFGetElementByEFFieldName("bi_" + i).value = newnum1;
+		}
+	}
+}
+function tipoMoneda1(){
+for(i=1;i<6;i++){
+	  var nume1 = __EFGetElementByEFFieldName("otros_" + i).value;
+		if (nume1 != ""){
+			var nume2 = nume1.replace(",", ".");
+			var newnum1 = Math.round(nume2 * 100) / 100;
+			var newnum2 = newnum1.toFixed(2);
+			__EFGetElementByEFFieldName("otros_" + i).value = newnum2;
+		}
+	}
+}
+function tipoMoneda2(){
+for(i=1;i<6;i++){
+	  var numer1 = __EFGetElementByEFFieldName("igv_" + i).value;
+		if (numer1 != ""){
+			var numer2 = numer1.replace(",", ".");
+			var newnume1 = Math.round(numer2 * 100) / 100;
+			var newnume2 = newnume1.toFixed(2);
+			__EFGetElementByEFFieldName("igv_" + i).value = newnume2;
+		}
+	}
+}
+//------------------------suma de BI -- OTROS -- IGV------------------------------
+function suma01(){
+	for(i=1;i<6;i++){
+		var num1 = __EFGetElementByEFFieldName("bi_" + i).value;
+		var num2 = __EFGetElementByEFFieldName("otros_" + i).value;
+		var num3 = __EFGetElementByEFFieldName("igv_" + i).value;
+		if (num1 == ""){
+			num1 = 0;
+		}
+		if(num2 == ""){
+			num2 = 0;
+		}
+		if(num3 == ""){
+			num3 = 0;
+		}
+		__EFGetElementByEFFieldName("importe_" + i).value = (parseFloat(num1) + parseFloat(num2) + parseFloat(num3)).toFixed(2);
+		
+	}
+}
+//---------------------------------------Suma Total BI-------------------------------
+function sumaBI(){
+var sumaBI = 0;
+	for(i=1;i<6;i++){
+		var nomber = __EFGetElementByEFFieldName("bi_" + i).value;
+		if(nomber != ""){
+			sumaBI = parseFloat(sumaBI) + parseFloat(nomber);
+		}
+	}
+	__EFGetElementByEFFieldName("biT_1").value = sumaBI.toFixed(2);
+}
+//----Suma Total OTROS------
+function sumaOtros(){
+var sumaOtros = 0;
+	for(i=1;i<6;i++){
+		var nomber = __EFGetElementByEFFieldName("otros_" + i).value;
+		if(nomber != ""){
+			sumaOtros = parseFloat(sumaOtros) + parseFloat(nomber);
+		}else{
+			sumaOtros = parseFloat(sumaOtros) + 0;
+		}
+	}
+	__EFGetElementByEFFieldName("otrosT_1").value = sumaOtros.toFixed(2);
+}
+//-----------------------------------Suma Total IGV-------------------------
+function sumaIgv(){
+var nomber1 = __EFGetElementByEFFieldName("igv_1").value;
+var nomber2 = __EFGetElementByEFFieldName("igv_2").value;
+var nomber3 = __EFGetElementByEFFieldName("igv_3").value;
+var nomber4 = __EFGetElementByEFFieldName("igv_4").value;
+var nomber5 = __EFGetElementByEFFieldName("igv_5").value;
+var TsumaIgv = parseFloat(nomber1) + parseFloat(nomber2) + parseFloat(nomber3) + parseFloat(nomber4) + parseFloat(nomber5);
+	__EFGetElementByEFFieldName("igvT_1").value = TsumaIgv.toFixed(2);
+}
+//----------------Suma Total del Importe--------------------
+function sumaImp(){
+var numn1 = __EFGetElementByEFFieldName("biT_1").value;
+var numn2 = __EFGetElementByEFFieldName("otrosT_1").value;
+var numn3 = __EFGetElementByEFFieldName("igvT_1").value;
+var TsumaImp = parseFloat(numn1) + parseFloat(numn2) + parseFloat(numn3);
+	__EFGetElementByEFFieldName("importeT_1").value = TsumaImp.toFixed(2);
+}
+//---------------------Importe Sin Comprobante de Pago------------------------
+//----convertir a decimales
+function decimal(){
+for(i=1;i<6;i++){
+	  var n1 = __EFGetElementByEFFieldName("importeCP_" + i).value;
+		if (n1 != ""){
+			var n2 = n1.replace(",", ".");
+			var newn1 = Math.round(n2 * 100) / 100;
+			var newn2 = newn1.toFixed(2);
+			__EFGetElementByEFFieldName("importeCP_" + i).value = newn2;
+		}
+	}
+}
+function sumaImpCP(){
+var sumImpCP = 0;
+	for(i=1;i<6;i++){
+		var valor = __EFGetElementByEFFieldName("importeCP_" + i).value;
+		if(valor != ""){
+			sumImpCP = parseFloat(sumImpCP) + parseFloat(valor);
+		}
+	}
+	__EFGetElementByEFFieldName("TImporteCP_1").value = sumImpCP.toFixed(2);
+}
+//-------------------Importe Otros Gastos---------------------
+//----convertir a decimales
+function decimal1(){
+for(i=1;i<6;i++){
+	  var nm1 = __EFGetElementByEFFieldName("importeOG_" + i).value;
+		if (nm1 != ""){
+			var nm2 = nm1.replace(",", ".");
+			var newnm1 = Math.round(nm2 * 100) / 100;
+			var newnm2 = newnm1.toFixed(2);
+			__EFGetElementByEFFieldName("importeOG_" + i).value = newnm2;
+		}
+	}
+}
+function sumaImpOG(){
+var nm1 = __EFGetElementByEFFieldName("importeOG_1").value;
+var nm2 = __EFGetElementByEFFieldName("importeOG_2").value;
+var nm3 = __EFGetElementByEFFieldName("importeOG_3").value;
+var nm4 = __EFGetElementByEFFieldName("importeOG_4").value;
+var nm5 = __EFGetElementByEFFieldName("importeOG_5").value;
+var sumImpOG = parseFloat(nm1) + parseFloat(nm2) + parseFloat(nm3) + parseFloat(nm4) + parseFloat(nm5);
+	__EFGetElementByEFFieldName("TImporteOG_1").value = sumImpOG.toFixed(2);
+}
+//-------------Suma Total de Gastos sin comprobantes---------------
+if(__EFGetElementByEFFieldName("TImporteCP_1").value != "" && __EFGetElementByEFFieldName("TImporteOG_1").value == ""){
+	__EFGetElementByEFFieldName("TTotalGCP").value = __EFGetElementByEFFieldName("TImporteCP_1").value;
+}else if(__EFGetElementByEFFieldName("TImporteCP_1").value == "" && __EFGetElementByEFFieldName("TImporteOG_1").value != ""){
+	__EFGetElementByEFFieldName("TTotalGCP").value = __EFGetElementByEFFieldName("TImporteOG_1").value;
+}else{
+	__EFGetElementByEFFieldName("TTotalGCP").value = (parseFloat(__EFGetElementByEFFieldName("TImporteCP_1").value) + parseFloat(__EFGetElementByEFFieldName("TImporteOG_1").value)).toFixed(2);
+}
+//-------Suma total de gastos--------------
+if(__EFGetElementByEFFieldName("importeT_1").value != "" && __EFGetElementByEFFieldName("TTotalGCP").value == ""){
+	__EFGetElementByEFFieldName("TTotalGCP_1").value = __EFGetElementByEFFieldName("importeT_1").value;
+}else if(__EFGetElementByEFFieldName("importeT_1").value == "" && __EFGetElementByEFFieldName("TTotalGCP").value != ""){
+	__EFGetElementByEFFieldName("TTotalGCP_1").value = __EFGetElementByEFFieldName("TTotalGCP").value;
+}else{
+	__EFGetElementByEFFieldName("TTotalGCP_1").value = (parseFloat(__EFGetElementByEFFieldName("importeT_1").value) + parseFloat(__EFGetElementByEFFieldName("TTotalGCP").value)).toFixed(2);
+}
+
+//------------------------------Formulario de rendicion de gastos de viaje-----------
+//---------funciones--------------------------------
+//-------Impuestos----------------
+//--convertir a decimales----
+function convDecimal(){
+for(i=1;i<4;i++){
+	  var num1 = __EFGetElementByEFFieldName("valorImp_" + i).value;
+		if (num1 != ""){
+			var num2 = num1.replace(",", ".");
+			var newnum = Math.round(num2 * 100) / 100;
+			var newnum1 = newnum.toFixed(2);
+			__EFGetElementByEFFieldName("valorImp_" + i).value = newnum1;
+		}
+	}
+}
+//---SubTotal de impuestos
+function subTotalImp(){
+var subtotal = 0;
+	for(i=1;i<4;i++){
+		var valor1 = __EFGetElementByEFFieldName("valorImp_" + i).value;
+		if(valor1 != ""){
+			subtotal = parseFloat(subtotal) + parseFloat(valor1);
+		}
+	}
+	__EFGetElementByEFFieldName("subTImp").value = subtotal.toFixed(2);
+//-------Transporte.------------
+//--convertir a decimales----
+function convDecimalT(){
+for(i=1;i<4;i++){
+	  var val1 = __EFGetElementByEFFieldName("valorTransp_" + i).value;
+		if (val1 != ""){
+			var val2 = val1.replace(",", ".");
+			var newval = Math.round(val2 * 100) / 100;
+			var newval1 = newval.toFixed(2);
+			__EFGetElementByEFFieldName("valorTransp_" + i).value = newval1;
+		}
+	}
+}
+//---SubTotal de Transporte
+function subTotalTransp(){
+var subtotal = 0;
+	for(i=1;i<4;i++){
+		var valor1 = __EFGetElementByEFFieldName("valorTransp_" + i).value;
+		if(valor1 != ""){
+			subtotal = parseFloat(subtotal) + parseFloat(valor1);
+		}
+	}
+	__EFGetElementByEFFieldName("subTransp").value = subtotal.toFixed(2);
+}
+//-----------Alojamiento---------------------------------------
+//--convertir a decimales----
+function convDecimalA(){
+for(i=1;i<4;i++){
+	  var val1 = __EFGetElementByEFFieldName("valorAloja_" + i).value;
+		if (val1 != ""){
+			var val2 = val1.replace(",", ".");
+			var newval = Math.round(val2 * 100) / 100;
+			var newval1 = newval.toFixed(2);
+			__EFGetElementByEFFieldName("valorAloja_" + i).value = newval1;
+		}
+	}
+}
+//---SubTotal de Alojamiento
+function subTotalAloja(){
+var subtotal = 0;
+	for(i=1;i<4;i++){
+		var valor1 = __EFGetElementByEFFieldName("valorAloja_" + i).value;
+		if(valor1 != ""){
+			subtotal = parseFloat(subtotal) + parseFloat(valor1);
+		}
+	}
+	__EFGetElementByEFFieldName("subTAloja").value = subtotal.toFixed(2);
+}
+//------------------Varios----------------
+//--convertir a decimales----
+function convDecimalV(){
+for(i=1;i<4;i++){
+	  var val1 = __EFGetElementByEFFieldName("valorVarios_" + i).value;
+		if (val1 != ""){
+			var val2 = val1.replace(",", ".");
+			var newval = Math.round(val2 * 100) / 100;
+			var newval1 = newval.toFixed(2);
+			__EFGetElementByEFFieldName("valorVarios_" + i).value = newval1;
+		}
+	}
+}
+//---SubTotal de Varios
+function subTotalVarios(){
+var subtotal = 0;
+	for(i=1;i<4;i++){
+		var valor1 = __EFGetElementByEFFieldName("valorVarios_" + i).value;
+		if(valor1 != ""){
+			subtotal = parseFloat(subtotal) + parseFloat(valor1);
+		}
+	}
+	__EFGetElementByEFFieldName("subTVarios").value = subtotal.toFixed(2);
+}
+//----Calcular los Totales---
+//--Total de gastos--
+function Tgastos(){
+__EFGetElementByEFFieldName("totalGasto").value = (+parseFloat(__EFGetElementByEFFieldName("subTVarios").value) + parseFloat(__EFGetElementByEFFieldName("subTAloja").value) + parseFloat(__EFGetElementByEFFieldName("subTransp").value) + parseFloat(__EFGetElementByEFFieldName("subTImp").value)).toFixed(2);
+}
+
+//--Saldo a favor del empleado--
+function SEmpleado(){
+alert("empleaado");
+		__EFGetElementByEFFieldName("saldoEmplea").value = (+parseFloat(__EFGetElementByEFFieldName("totaAnt").value) - parseFloat(__EFGetElementByEFFieldName("totalGasto").value)).toFixed(2);
+}

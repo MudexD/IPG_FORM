@@ -1,0 +1,199 @@
+﻿IPG
+1. los estados se vana manejar por propietario del formulario (persona) 
+2. Se necesita que los correos se jalen de la BD.
+_______________________________________________________________________________________
+Tiempos trabajados en los WF - IPG
+13-06-2018
+Inicio: 15:30hrs	Fin: 
+
+-Crear los Roles en el Admin.
+
+
+
+_______________________________________________________________________________________
+WF-Requerimiento de Personal
+____________________________
+Trabajo realizado:
+1. Bloquear todo los objetos para los estados diferentes a Solicitante
+2. Habilitar el historial de los comentarios por cada estado.
+3. Crear el Aprobador segun el estado.
+4. Crear los Workflow's y configurar el cambio de propietario.
+5. Editar los Permisos de roles por estado.
+5. Roles de acceso: Enlazar los roles del Amdin con los del WF.
+-------------Variables----------------------------------------------------------------
+>>NameSolicitante::Almacena el nombre del solicitante.
+>>ApproverHead::Almacena el nombre del aprobador Head, quien sera el propietario del formulatio en el estado Revisión Head.
+>>ApproverCEO::Almacena el nombre del aprobador CEO, quien sera el propietario del formulatio en el estado Revisión CEO.
+>>TotalComment::Se almacena el historial de los comentarios.
+------------Cond. Visibility-----------------------------------------------------------
+>>Visible si: "[STATENAME]" == "Solicitante"
+>>Visible si: "[STATENAME]" == "Revisión Head"
+>>Visible si: "[STATENAME]" == "Revisión CEO"
+-------Grupos de Visivilidad (GV) y habilitado (GH)---
+>>GH01 >> Habilitado si: "[STATENAME]" == "Solicitante"
+_______________________________________________________________________________________
+WF-FORMATO DE VIAJE
+___________________
+Trabajo realizado:
+1. Bloquear todo los objetos para los estados diferentes a Solicitante
+2. Habilitar el historial de los comentarios por cada estado.
+3. Crear el Aprobador segun el estado.
+4. Crear los Workflow's y configurar el cambio de propietario.
+5. Roles de acceso: Enlazar los roles del Admin con los del WF.
+6. Editar los Permisos de roles por estado
+---------------Variables---------------------------------------------------------------
+>>NameSolicitante::Almacena el nombre del solicitante.
+>>ApproverHead::Almacena el nombre del aprobador Head, quien sera el propietario del formulatio en el estado Revisión Head.
+>>ApproverCEO::Almacena el nombre del aprobador CEO, quien sera el propietario del formulatio en el estado Revisión CEO.
+>>TotalComment::Se almacena el historial de los comentarios.
+---------------Cond. Visibility--------------------------------------------------------
+>>Visible si: "[STATENAME]" == "Solicitante"
+>>Visible si: "[STATENAME]" == "Revisión Head"
+>>Visible si: "[STATENAME]" == "Revisión CEO"
+-------Grupos de Visivilidad (GV) y habilitado (GH)---
+>>GH01>>:Habilitado si: "[STATENAME]" == "Solicitante"
+_______________________________________________________________________________________
+WF-RENDICION DE GASTOS DE VIAJE
+_______________________________
+Trabajo realizado:
+1. Bloquear todo los objetos para los estados diferentes a Solicitante
+2. Realizar la suma de los subtotales.
+3. Relacionar los roles del admin con los del WF.
+4. Capturar los usuarios Head, y CEO.
+5. Editar los Permisos de los estados.
+6. Editar el cambio de propietario para el paso de cada estado del WF.
+
+---------------Variables---------------------------------------------------------------
+>>NameSolicitante::Almacena el nombre del solicitante.
+>>ApproverHead::Almacena el nombre del aprobador Head, quien sera el propietario del formulatio en el estado Revisión Head.
+>>ApproverCEO::Almacena el nombre del aprobador CEO, quien sera el propietario del formulatio en el estado Revisión CEO.
+---------------Cond. Visibility--------------------------------------------------------
+>>Visible si: "[STATENAME]" == "Solicitante"
+>>Visible si: "[STATENAME]" == "Revisión Head"
+>>Visible si: "[STATENAME]" == "Revisión CEO"
+-------Grupos de Visivilidad (GV) y habilitado (GH)---
+>>GH01>>:Habilitado si: "[STATENAME]" == "Solicitante"
+
+
+
+
+_______________________________________________________________________________________
+Query utilizado en los Template : FORMATO DE VIAJE :: REQUERIMIENTO DE PERSONAL ::
+**Nota: para Requerimiento de personal cambia [FORM:viajero_1] por [FORM:solicitante_1]
+**Para rendicion de viajes cambiar [FORM:viajero_1] por [FORM:nombre_1]
+
+>>Para obtener el listado de los nombres de los usuarios de la tabala HP_Users::
+	SELECT id_user, REPLACE(description,'.', ' ') AS description
+ 	FROM HD_Users
+
+>>Para obtener el valor de la variable::NameSolicitante::
+	SELECT description
+	  FROM HD_Users
+	  WHERE CONVERT(int, '[FORM:viajero_1]') = id_user
+
+ >>Para obtener el valor de la variable::ApproverHead::
+	 SELECT description
+	  FROM HD_Users
+	  Where (Select id_Superior FROM HD_Users WHERE '[FORM:NameSolicitante]' = description) = id_user
+
+ >>Para obtener el valor de la variable::ApproverCEO::
+	 SELECT description
+	  FROM HD_Users
+	  WHERE  id_rol = '7'
+
+>>Para obtener el jefe direrecto segun lo seleccionado en el listado usuarios::
+	SELECT id_user, REPLACE(description,'.', ' ') AS description
+  	FROM HD_Users
+  	Where (Select id_Superior FROM HD_Users WHERE CONVERT(int, '[FORM:solicitante_1]') = id_user) = id_user
+
+__________________________________________________________________________________
+Usuarios creados para el Test
+_____________________________
+**Todos tienen como contraseña generica : Ipg2018
+
+Lista:
+	Carlos.Rojas
+	Fabiola.Pinto
+	Cesar.Oliart
+	Enrique.Hoyos
+	Jose.Toyama
+	Carlos.Ortiz
+	Mayra.Toledo
+	Brenda.Cuadros
+	Luis.Campodonico
+______________________________________________________________________________________________________________
+REEMBOLSO DE GASTOS
+____________________
+1. Agregar los comentarios
+2. Obtener los participantes del flujo (solicitante,Head,Finanzas1, Finanzas2 y CEO).
+3. Mapear los roles de WF con los del Admin.
+4. Editar los controles de acceso al estado del Rol.
+5. Se realizo el paso de estados del WF. Donde en cada cambio que se realiza se cambia de propietario del formulario. a excepcion de los estados de Finanzas. Donde se mantiene el propietario anterior; esto se debe a que en el estado de finanzas pueden participar dos a mas usuarios para aprobar la solicitud.
+6. Actualizar el script que realiza el calculo de suma los subtotales y los totales. 3h
+
+TTotalGCP_1
+mailFinanza1
+
+---Query---
+>>Para obtener el listado de los nombres de los usuarios de la tabala HP_Users::
+	SELECT id_user, REPLACE(description,'.', ' ') AS description
+ 	FROM HD_Users
+
+>>Para obtener el valor de la variable::NameSolicitante::
+	SELECT description
+	  FROM HD_Users
+	  WHERE CONVERT(int, '[FORM:colaborador_1]') = id_user
+
+ >>Para obtener el valor de la variable::ApproverHead::
+	 SELECT description
+	  FROM HD_Users
+	  Where (Select id_Superior FROM HD_Users WHERE '[FORM:NameSolicitante]' = description) = id_user
+
+ >>Para obtener el valor de la variable::ApproverCEO::
+	 SELECT description
+	  FROM HD_Users
+	  WHERE  id_rol = '7'
+
+________________________________________________________________________________________________________________
+SOLICITUD DE ENTREGA A RENDIR
+_____________________________
+1. Agregar los comentarios.
+2. Obtener los participantes del flujo (solicitante,Head,Finanzas1, Finanzas2 y CEO).
+3. Mapear los roles de WF con los del Admin.
+4. Editar los controles de acceso al estado del Rol.
+5. Se realizo el paso de estados del WF. Donde en cada cambio que se realiza se cambia de propietario del formulario. a excepcion de los estados de Finanzas. Donde se mantiene el propietario anterior; esto se debe a que en el estado de finanzas pueden participar dos a mas usuarios para aprobar la solicitud.
+6. Se creo un grupo de habilitado para todos los objetos en el estado de Solicitante.
+
+
+________________________________________________________________________________________________________________
+Modificaciones:
+_______________26062018
+1. Se crearon dos tablas en BD: Pais y ciudad; contiene la mayor parte de los paises con sus principales ciudades.
+2. El formulario Solicitud de viajes: se agrego dos Selectlist: Pais; carga al iniciar el formulario todos los paises que se encuentran en la tabla de BD. Ciudad; al escoger el pais realiza una consulta a la tabla filtradon segun el codigo del pais antes escogido.
+3. Para los formularios que hacen sumas de los datos, se esta agregando una validacion por medio de una expresion regular que evalua si el dato ingresado es Numerico o decimal. Esto se hace porque no se puede especificar el tipo de dato al cuadro de texto por medio de sus propiedades, ocurre un error al colocar como decimal el input, al pasar de estado elimina el punto y todo se convierte en un numero entero.::Expresion: ^(\d|-)?(\d|,)*\.?\d*$
+4. para los correos de los usuarios que intervienen en finanzas, se crearon unas variables en el formulario que por medio de un store realizan la consulta a tabla Vista_usuarios y almacenan la direccion de correo electronico para ser luego utilizada en las notificaciones an el paso de estado.
+
+
+
+__________________________
+_____
+*Estado 2  no aparece el valor.
+*TextBox impuesto01 Flata bloquear.
+*No lista los comentarios.
+*Los valores de las variables desaparecen.
+_____________
+__Solicitud de Viaje
+*Total estimado pasajes y Total viaticos para viaje; no cambia a decimales
+_____________________________________________________________________________
+____Formularios Probados con exito_____
+* IPG MEDIABRANDS - Requerimiento de Personal::Nro. Instancia: 15937 Version 17,001
+*IPG MEDIABRANDS - Solicitud de Viaje:::Nro. Instancia: 15938  Version: 13,001
+*IPG MEDIABRANDS - Formato de Entregas a Rendir::Nro. Instancia: 15944  version: 11,003
+*IPG MEDIABRANDS - Reembolso de Gastos::Nro Instancia: 15946  version 20,001
+
+___________________________________________________
+No aparece los aeropuertos escogidos
+TextArea en Head tampoco aparece
+
+04 REEMBOLSO DE GASTOS
+03 RENDICION DE GASTOS DE VIAJE
